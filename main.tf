@@ -63,6 +63,16 @@ resource "aws_route_table" "tf-routes" {
     }
 }
 
+resource "aws_route_table_association" "route-primary" {
+  subnet_id      = aws_subnet.tf-primary.id
+  route_table_id = aws_route_table.tf-routes.id
+}
+
+resource "aws_route_table_association" "route-secondary" {
+  subnet_id      = aws_subnet.tf-secondary.id
+  route_table_id = aws_route_table.tf-routes.id
+}
+
 #Create SG
 resource "aws_security_group" "tf-instance-sg" {
     name = "tf-instance-sg"
