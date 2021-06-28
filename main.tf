@@ -49,6 +49,20 @@ resource "aws_subnet" "tf-secondary" {
     }
 }
 
+# Create route table
+resource "aws_route_table" "tf-routes" {
+    vpc_id = aws_vpc.schibes-demo-vpc.id
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.tf-gw.id"
+    }
+
+    tags = {
+        Name = "VPC Routes"
+    }
+}
+
 #Create SG
 resource "aws_security_group" "tf-instance-sg" {
     name = "tf-instance-sg"
