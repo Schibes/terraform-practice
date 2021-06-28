@@ -40,6 +40,37 @@ resource "aws_subnet" "tf-secondary" {
     }
 }
 
+#Create SG
+resource "aws_security_group" "tf-instance-sg" {
+    name = "tf-instance-sg"
+    description "Allow traffic to EC2 instances"
+    vpc_id = aws_vpc.schibes-demo-vpc.id
+
+    ingress {
+        description      = "TLS"
+        from_port        = 443
+        to_port          = 443
+        protocol         = "tcp"
+        cidr_blocks      = [aws_vpc.schibes-demo-vpc.cidr_block]
+    }
+
+    ingress {
+        description      = "SSH"
+        from_port        = 22
+        to_port          = 22
+        protocol         = "tcp"
+        cidr_blocks      = [aws_vpc.schibes-demo-vpc.cidr_block]
+    }
+
+    egress {
+        from_port        = 0
+        to_port          = 0
+        protocol         = "-1"
+        cidr_blocks      = ["0.0.0.0/0"]
+      }
+
+}
+
 # Create an EC2 instance in Primary subnet
 resource "aws_instance" "tf-server1" {
     ami = "ami-0d563aeddd4be7fff" #Ubuntu 16 in us-east-2
@@ -47,8 +78,20 @@ resource "aws_instance" "tf-server1" {
     subnet_id = aws_subnet.tf-primary.id
     key_name = "schibes-ubuntu"
     associate_public_ip_address = "true"
+
+    user_data = <<-EOF
+            #!/bin/bash
+            sudo apt -y update
+            sudo apt install -y nginx
+            cd /var/www/html
+            sudo rm index.nginx-debian.html
+            sudo wget https://raw.githubusercontent.com/Schibes/Schibes-cloudformation-demo/master/index.nginx-debian.html
+            sudo systemctl enable nginx
+            sudo systemctl restart nginx
+            EOF
+
     tags = {
-        Name = "Primary"
+        Name = "Server 1"
     }
 }
 
