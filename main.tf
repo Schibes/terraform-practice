@@ -49,7 +49,7 @@ resource "aws_subnet" "tf-secondary" {
     }
 }
 
-# Create route table
+# Create route table and associations
 resource "aws_route_table" "tf-routes" {
     vpc_id = aws_vpc.schibes-demo-vpc.id
 
