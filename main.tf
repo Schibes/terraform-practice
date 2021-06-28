@@ -78,6 +78,7 @@ resource "aws_instance" "tf-server1" {
     subnet_id = aws_subnet.tf-primary.id
     key_name = "schibes-ubuntu"
     associate_public_ip_address = "true"
+    vpc_security_group_ids = [aws_security_group.tf-instance-sg.id]
 
     user_data = <<-EOF
             #!/bin/bash
