@@ -44,7 +44,7 @@ resource "aws_subnet" "tf-secondary" {
 resource "aws_instance" "tf-server1" {
     ami = "ami-0d563aeddd4be7fff" #Ubuntu 16 in us-east-2
     instance_type = "t2.micro"
-    subnet_id = aws_subnet.tf_primary.id
+    subnet_id = aws_subnet.tf-primary.id
     key_name = "schibes-ubuntu"
     associate_public_ip_address = "true"
     tags = {
