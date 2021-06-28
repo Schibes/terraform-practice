@@ -43,7 +43,7 @@ resource "aws_subnet" "tf-secondary" {
 #Create SG
 resource "aws_security_group" "tf-instance-sg" {
     name = "tf-instance-sg"
-    description "Allow traffic to EC2 instances"
+    description = "Allow traffic to EC2 instances"
     vpc_id = aws_vpc.schibes-demo-vpc.id
 
     ingress {
@@ -67,7 +67,7 @@ resource "aws_security_group" "tf-instance-sg" {
         to_port          = 0
         protocol         = "-1"
         cidr_blocks      = ["0.0.0.0/0"]
-      }
+    }
 
 }
 
