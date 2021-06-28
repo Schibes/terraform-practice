@@ -22,9 +22,33 @@ resource "aws_vpc" "schibes-demo-vpc" {
     enable_dns_hostnames = "true"
 }
 
-# Create an EC2 instance
-resource "aws_instance" "server1" {
+# Create subnet 1
+resource "aws_subnet" "tf-primary" {
+    vpc_id = aws_vpc.schibes-demo-vpc.vpc_id
+    cidr_block = "10.70.100.0/24"
+    tags = {
+        Name = "Primary"
+    }
+}
+
+# Create subnet 2
+resource "aws_subnet" "tf-secondary" {
+    vpc_id = aws_vpc.schibes-demo-vpc.vpc_id
+    cidr_block = "10.70.200.0/24"
+    tags = {
+        Name = "Secondary"
+    }
+}
+
+# Create an EC2 instance in Primary subnet
+resource "aws_instance" "tf-server1" {
     ami = "ami-0d563aeddd4be7fff" #Ubuntu 16 in us-east-2
     instance_type = "t2.micro"
+    subnet_id = aws_subnet.tf_primary.subnet_id
+    key_name = "schibes-ubuntu"
     associate_public_ip_address = "true"
+    tags = {
+        Name = "Primary"
+    }
 }
+
