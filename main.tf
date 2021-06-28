@@ -22,6 +22,15 @@ resource "aws_vpc" "schibes-demo-vpc" {
     enable_dns_hostnames = "true"
 }
 
+# Create Internet Gateway for the VPC
+resource "aws_internet_gateway" "tf-gw" {
+    vpc_id = aws_vpc.schibes-demo-vpc.id
+
+    tags = {
+        Name = "Terraform Internet Gateway"
+    }
+}
+
 # Create subnet 1
 resource "aws_subnet" "tf-primary" {
     vpc_id = aws_vpc.schibes-demo-vpc.id
