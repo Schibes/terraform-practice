@@ -10,7 +10,7 @@ terraform {
 # Configure the AWS Provider to build in the cloud
 provider "aws" {
     profile = "default"
-    region = "us-east-2"
+    region = var.aws_region
 }
 
 # Create a VPC
