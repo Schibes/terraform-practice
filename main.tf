@@ -18,7 +18,7 @@ resource "aws_vpc" "schibes-demo-vpc" {
     tags = {
         Name = "schibes-demo-vpc"
     }
-    cidr_block = "10.70.0.0/16"
+    cidr_block = var.vpc_cidr
     enable_dns_hostnames = "true"
 }
 
@@ -34,7 +34,7 @@ resource "aws_internet_gateway" "tf-gw" {
 # Create subnet 1
 resource "aws_subnet" "tf-primary" {
     vpc_id = aws_vpc.schibes-demo-vpc.id
-    cidr_block = "10.70.100.0/24"
+    cidr_block = var.primary_subnet
     tags = {
         Name = "Primary"
     }
@@ -43,7 +43,7 @@ resource "aws_subnet" "tf-primary" {
 # Create subnet 2
 resource "aws_subnet" "tf-secondary" {
     vpc_id = aws_vpc.schibes-demo-vpc.id
-    cidr_block = "10.70.200.0/24"
+    cidr_block = var.secondary_subnet
     tags = {
         Name = "Secondary"
     }
@@ -106,7 +106,7 @@ resource "aws_security_group" "tf-instance-sg" {
 
 # Create an EC2 instance in Primary subnet
 resource "aws_instance" "tf-server1" {
-    ami = "ami-0d563aeddd4be7fff" #Ubuntu 16 in us-east-2
+    ami = var.ubuntu16_ami
     instance_type = "t2.micro"
     subnet_id = aws_subnet.tf-primary.id
     key_name = "schibes-ubuntu"
